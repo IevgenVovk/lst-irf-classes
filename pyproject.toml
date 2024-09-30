@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "iclass"
+version = "0.0.1"
+authors = [
+  { name="Ievgen Vovk", email="vovk@icrr.u-tokyo.ac.jp" },
+  { name="Marcel Strzys", email="strzys@icrr.u-tokyo.ac.jp" },
+  { name="Daniela Hadasch", email="hadasch@icrr.u-tokyo.ac.jp" },
+]
+description = "Tools to create event classes for IACTs in general and CTA/LST specifically"
+readme = "README.md"
+license = { file="LICENSE" }
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: BSD 3-Clause",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "numpy",
+    "scikit-learn"
+]
+
+[project.urls]
+"Homepage" = "https://github.com/IevgenVovk/lst-irf-classes"
+"Bug Tracker" = "https://github.com/IevgenVovk/lst-irf-classes/issues"
+
+[project.scripts]
+
+
+[tool.setuptools.package-data]
+
