@@ -21,7 +21,10 @@ classifiers = [
 ]
 dependencies = [
     "numpy",
-    "scikit-learn"
+    "scikit-learn",
+    "pandas",
+    "tables",
+    "matplotlib"
 ]
 
 [project.urls]
