@@ -7,6 +7,29 @@ from iclass.markup import mkmarkup
 
 
 def get_ref_df(log_emin: float, log_emax: float, ebinsdec: int, nclasses: int, nsamples: int) -> pd.DataFrame:
+    """
+    Creates a mock event data frame.
+
+    Parameters
+    ----------
+    log_emin: float
+        log10 of the minimal energy to take
+    log_emax: float
+        log10 of the maximal energy to take
+    ebinsdec: int
+        number of bins per decade to assume
+    nclasses: int
+        number of PSF classes to assume
+    nsamples: int
+        number of event samples to take
+        (each with the shape (nclasses, nenergies))
+
+    Returns
+    -------
+    df: pd.DataFrame
+        examplary event list
+    """
+
     _offset = np.arange(nclasses)
     _loge = np.linspace(log_emin, log_emax, num=ebinsdec+1)[:-1]
     _sample_id = np.arange(nsamples)
