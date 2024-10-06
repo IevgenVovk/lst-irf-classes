@@ -41,6 +41,13 @@ def main() -> None:
         default='gammaness > 0.7 & intensity > 50 & r < 1 & wl > 0.01 & wl < 1 & leakage_intensity_width_2 < 1',
         help='event cuts to apply'
     )
+    parser.add_argument(
+        '-z',
+        "--complevel",
+        type=int,
+        default=7,
+        help='HDF5 data compression level'
+    )
     args = parser.parse_args()
 
     logging.basicConfig(
@@ -51,7 +58,7 @@ def main() -> None:
 
     copyfile(args.input, args.output)
     data = mkmarkup(args.input, args.key, args.ebinsdec, args.cuts)
-    data.to_hdf(args.output, key=args.key)
+    data.to_hdf(args.output, key=args.key, complevel=args.complevel)
 
 
 if __name__ == "__main__":
