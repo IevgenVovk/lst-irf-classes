@@ -1,6 +1,8 @@
 import argparse
 import logging
 
+from shutil import copyfile
+
 from iclass.markup.markup import mkmarkup
 
 
@@ -46,6 +48,8 @@ def main() -> None:
         format='%(asctime)s %(name)-30s : %(levelname)-8s %(message)s',
         datefmt='%Y-%m-%d %H:%M:%S',
     )
+
+    copyfile(args.input, args.output)
     data = mkmarkup(args.input, args.key, args.ebinsdec, args.cuts)
     data.to_hdf(args.output, key=args.key)
 
