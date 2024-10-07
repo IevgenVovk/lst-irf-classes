@@ -7,6 +7,15 @@ def mkmarkup(input_fname: str, key: str, ebinsdec: float, cuts: str = '') -> pd.
     """
     Marks up the PSF classes within the MC file.
 
+    Calculates the reconstructed event angular offset wrt to the
+    true coordinates and splits events into "PSF classes" defined by
+    the 25, 50, 75 and 100% offset population percentiles within the
+    energy bins of the pre-defined width.
+
+    The input MC file should be of DL2 level - i.e. include the
+    reconstructed event directions ("reco_src_x" and "reco_src_y"
+    columns describing it in the telescope camera frame).
+
     Parameters
     ----------
     input_fname: str
