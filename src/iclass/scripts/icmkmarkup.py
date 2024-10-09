@@ -3,7 +3,7 @@ import logging
 
 from shutil import copyfile
 
-from iclass.markup.markup import mkmarkup
+from iclass.markup import mkmarkup
 
 
 def main() -> None:
