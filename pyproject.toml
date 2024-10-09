@@ -32,6 +32,7 @@ dependencies = [
 "Bug Tracker" = "https://github.com/IevgenVovk/lst-irf-classes/issues"
 
 [project.scripts]
+icmcsplit = "iclass.scripts.mcsplit:main"
 icmkmarkup = "iclass.scripts.icmkmarkup:main"
 
 [tool.setuptools.package-data]
