@@ -1,7 +1,11 @@
+"""Script to train a random forest classifier for IRF event classes 
+(so far PSFR only). Part of the lst-irf-classes module.
+"""
 import argparse
-import joblib
 import json
 import logging
+
+import joblib
 import pandas as pd
 
 from iclass.rf_func import feature_importance, train_rf
@@ -13,6 +17,7 @@ logging.basicConfig(
         datefmt='%Y-%m-%d %H:%M:%S',
     )
 logger = logging.getLogger(__name__)
+
 
 def main() -> None:
     parser = argparse.ArgumentParser(
@@ -61,40 +66,43 @@ def main() -> None:
         default=7,
         help='scikit-learn data compression level'
     )
-    
+
     args = parser.parse_args()
-    
+
     try:
         train_df = pd.read_hdf(args.input, key=args.event_key)
     except FileNotFoundError:
-        logger.error(f"Error: The file '{args.input}' was not found.")
+        logger.error("Error: The file %s was not found.", args.input)
     except OSError as e:
-        logger.error(f"Error: An issue occurred while reading the HDF5 file. {e}")
-    except Exception as e:
-        logger.error(f"An unexpected error occurred: {e}")
-     
+        logger.error("Error: An issue occurred while reading the HDF5 file: %s", e)
+    except json.JSONDecodeError:
+        logger.error("Error: Failed to decode JSON from %s.", args.input)
+
     try:
-        with open(args.config, 'r') as f:
+        with open(args.config, 'r', encoding='utf-8') as f:
             config = json.load(f)
     except FileNotFoundError:
-        logger.error(f"Error: The file '{args.config}' was not found.")
+        logger.error("Error: The file %s was not found.", args.config)
     except json.JSONDecodeError:
-        logger.error(f"Error: The file '{args.config}' is not a valid JSON.")
-    
+        logger.error("Error: The file %s is not a valid JSON.", args.config)
+
     # Train the IRF classes random forest.
     clf = train_rf(train_df, config)
-    
+
     # Check the most important features of the rf.
-    feature_names = train_df[config['random_forest_features']].columns
+    feature_names = train_df[config['random_forest_features']].columns.tolist()
     df_feature_importance = feature_importance(feature_names, clf)
-    
-    logger.info(f"Importance of the features according to their Gini indeces:")
+
+    logger.info("Importance of the features according to their Gini indeces:")
     print(df_feature_importance) 
 
     # Save the model to a file
     if args.save:
-        logger.info(f"Saving the RF to '{args.prefix}ic_rf.pkl.pkl'.")
-        joblib.dump(clf, f'{args.prefix}ic_rf.pkl.pkl', compress=args.complevel)
+        logger.info("Saving the RF to '{args.prefix}ic_rf.pkl.pkl'.")
+        joblib.dump(clf, f'{args.prefix}ic_rf.pkl.pkl', 
+                    compress=args.complevel
+                    )
+
 
 if __name__ == "__main__":
     main()
