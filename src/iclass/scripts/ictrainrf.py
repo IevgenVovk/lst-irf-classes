@@ -35,10 +35,11 @@ def main() -> None:
     parser.add_argument(
         '-p',
         "--prefix",
-        default='./out_',
-        help='output file name prefix. '
-        "It will be appended with 'ic_rf.pkl'"
-        "when generating the output files"
+        default='',
+        help='output file name prefix.'
+        ' If empty (default) no classifier is written to disc.'
+        ' It will be appended with "ic_rf.pkl,"'
+        ' when generating the output files'
     )
     parser.add_argument(
         '-e',
@@ -51,13 +52,6 @@ def main() -> None:
         "--config",
         default='',
         help='Configuration file for RF training.'
-    )
-    parser.add_argument(
-        '-s',
-        "--save",
-        type=bool,
-        default=True,
-        help='Safe the classifier to disk.'
     )
     parser.add_argument(
         '-z',
@@ -74,7 +68,8 @@ def main() -> None:
     except FileNotFoundError:
         logger.error("Error: The file %s was not found.", args.input)
     except OSError as e:
-        logger.error("Error: An issue occurred while reading the HDF5 file: %s", e)
+        logger.error("Error: An issue occurred while reading the HDF5 file:"
+                     "%s", e)
     except json.JSONDecodeError:
         logger.error("Error: Failed to decode JSON from %s.", args.input)
 
@@ -97,9 +92,9 @@ def main() -> None:
     print(df_feature_importance) 
 
     # Save the model to a file
-    if args.save:
+    if args.prefix != '':
         logger.info("Saving the RF to '{args.prefix}ic_rf.pkl.pkl'.")
-        joblib.dump(clf, f'{args.prefix}ic_rf.pkl.pkl', 
+        joblib.dump(clf, f'{args.prefix}ic_rf.pkl.pkl',
                     compress=args.complevel
                     )
 
