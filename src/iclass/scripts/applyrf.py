@@ -39,7 +39,7 @@ def main() -> None:
         help='output file name prefix. '
         "It will be appended with the original file name."
         "If '--split' option is specified, mulptiple files "
-        "with endings like 'part0.5h', 'part1.h5' etc, "
+        "with endings like 'class0.h5', 'class1.h5' etc, "
         "containing events of with individual PSF classes will be created."
     )
     parser.add_argument(
@@ -72,7 +72,7 @@ def main() -> None:
         fname, _ = os.path.splitext(file_name)
 
         for i, psf_class in enumerate(sample['reco_psf_class'].unique()):
-            output = f'{args.prefix}{fname}_part{i}.h5'
+            output = f'{args.prefix}{fname}_class{i}.h5'
             subsample = sample.query(f'reco_psf_class == {psf_class}')
             subsample.to_hdf(output, key=args.event_key, complevel=args.complevel)
     else:
