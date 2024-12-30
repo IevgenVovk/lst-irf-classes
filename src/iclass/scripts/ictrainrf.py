@@ -93,8 +93,9 @@ def main() -> None:
 
     # Save the model to a file
     if args.prefix != '':
-        logger.info("Saving the RF to '{args.prefix}ic_rf.pkl.pkl'.")
-        joblib.dump(clf, f'{args.prefix}ic_rf.pkl.pkl',
+        rf_file_name = f'{args.prefix}ic_rf.pkl'
+        logger.info(f"Saving the RF to '{rf_file_name}'.")
+        joblib.dump(clf, f'{rf_file_name}',
                     compress=args.complevel
                     )
 
