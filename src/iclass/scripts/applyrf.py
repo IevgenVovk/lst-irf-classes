@@ -5,7 +5,7 @@ import joblib
 import pandas as pd
 
 from iclass.rf_func import apply_rf
-from iclass.io import write_simulation_config
+from iclass.io import read_simulation_config, write_simulation_config
 
 
 def main() -> None:
@@ -72,7 +72,7 @@ def main() -> None:
 
     rf = joblib.load(args.rf)
     sample = pd.read_hdf(args.input, key=args.event_key)
-    cfg = pd.read_hdf(args.input, key=args.cfg_key)
+    cfg = read_simulation_config(args.input, key=args.cfg_key)
     sample = apply_rf(sample, rf)
 
     if args.split:
