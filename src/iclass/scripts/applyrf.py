@@ -79,8 +79,8 @@ def main() -> None:
         _, file_name = os.path.split(args.input)
         fname, _ = os.path.splitext(file_name)
 
-        for i, psf_class in enumerate(sample['reco_psf_class'].unique()):
-            output = f'{args.prefix}{fname}_class{i}.h5'
+        for psf_class in sample['reco_psf_class'].unique():
+            output = f'{args.prefix}{fname}_class{psf_class}.h5'
             subsample = sample.query(f'reco_psf_class == {psf_class}')
             subsample.to_hdf(output, key=args.event_key, complevel=args.complevel)
             # MC configuration table has to be written with `tables`
