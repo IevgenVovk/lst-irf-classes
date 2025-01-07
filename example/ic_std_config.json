@@ -1,4 +1,5 @@
 {
+  "cuts": "gammaness > 0.7 & intensity > 50 & r < 1 & wl > 0.01 & wl < 1 & leakage_intensity_width_2 < 1",
   "random_forest_args": {
     "max_depth": 30,
     "min_samples_leaf": 10,

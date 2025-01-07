@@ -87,6 +87,9 @@ def main() -> None:
     except json.JSONDecodeError:
         logger.error("Error: The file %s is not a valid JSON.", args.config)
 
+    if config.get('cuts', None):
+        train_df = train_df.query(config['cuts'])
+
     # Train the IRF classes random forest.
     clf = train_rf(train_df, config)
 
