@@ -2,6 +2,7 @@
 (so far PSFR only). Part of the lst-irf-classes module.
 """
 import argparse
+import glob
 import json
 import logging
 
@@ -30,7 +31,7 @@ def main() -> None:
         '-i',
         "--input",
         default='',
-        help='input Monte Carlo file name'
+        help='input Monte Carlo file name (or mask)'
     )
     parser.add_argument(
         '-p',
@@ -64,7 +65,12 @@ def main() -> None:
     args = parser.parse_args()
 
     try:
-        train_df = pd.read_hdf(args.input, key=args.event_key)
+        train_df = pd.concat(
+            [
+                pd.read_hdf(file_name, key=args.event_key)
+                for file_name in glob.glob(args.input)
+            ]
+        )
     except FileNotFoundError:
         logger.error("Error: The file %s was not found.", args.input)
     except OSError as e:
