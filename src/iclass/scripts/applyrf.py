@@ -11,7 +11,7 @@ from iclass.io import read_simulation_config, write_simulation_config
 def main() -> None:
     parser = argparse.ArgumentParser(
         description=r"""
-        Event class complutation tool for CTA-compatible event files.
+        Event class computation tool for CTA-compatible event files.
 
         Applies the pre-trained random forest to calculate 
         the PSF quality class.
