@@ -4,7 +4,7 @@ import os
 import joblib
 import pandas as pd
 
-from iclass.rf_func import apply_rf
+from iclass.rf import apply_rf
 from iclass.io import read_simulation_config, write_simulation_config
 
 

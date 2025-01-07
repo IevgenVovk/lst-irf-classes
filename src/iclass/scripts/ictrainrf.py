@@ -8,7 +8,7 @@ import logging
 import joblib
 import pandas as pd
 
-from iclass.rf_func import feature_importance, train_rf
+from iclass.rf import feature_importance, train_rf
 
 
 logging.basicConfig(

@@ -4,7 +4,7 @@
 import unittest
 from unittest.mock import MagicMock, patch
 import pandas as pd
-from iclass.rf_func import feature_importance, train_rf
+from iclass.rf import feature_importance, train_rf
 
 class TestFeatureImportance(unittest.TestCase):
 
@@ -32,7 +32,7 @@ class TestFeatureImportance(unittest.TestCase):
 
 class TestTrainRF(unittest.TestCase):
 
-    @patch('iclass.rf_func.RandomForestClassifier')
+    @patch('iclass.rf.RandomForestClassifier')
     def test_train_rf_with_config(self, MockRF):
         # Mock configuration and training data
         config = {
@@ -71,7 +71,7 @@ class TestTrainRF(unittest.TestCase):
 
 
 
-    @patch('iclass.rf_func.RandomForestClassifier')
+    @patch('iclass.rf.RandomForestClassifier')
     def test_train_rf_without_config(self, MockRF):
         # Mock training data with additional features
         df_train = pd.DataFrame({
