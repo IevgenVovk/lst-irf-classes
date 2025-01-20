@@ -1,7 +1,7 @@
 import unittest
 import numpy as np
 import pandas as pd
-from unittest.mock import patch
+from unittest.mock import Mock, patch
 
 
 from iclass.split import evtsplit, cfgsplit
@@ -73,8 +73,9 @@ class SplitTest(unittest.TestCase):
                 fractions = (0.5, 0.6),
             )
 
+    @patch('iclass.io.open_file')
     @patch('pandas.read_hdf')
-    def test_cfgsplit(self, mock_read_hdf):
+    def test_cfgsplit(self, mock_read_hdf, mock_open_file):
         n_showers = 100
         n_obs = 5
 
@@ -83,6 +84,11 @@ class SplitTest(unittest.TestCase):
         mock_read_hdf.configure_mock(
             return_value = cfg
         )
+        mock_open_file.configure_mock(
+            return_value = Mock()
+        )
+        mock_open_file.return_value.__enter__ = Mock()
+        mock_open_file.return_value.__exit__ = Mock()
 
         fractions_sample = (
             (0.7, 0.3),

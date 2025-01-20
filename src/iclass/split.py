@@ -2,6 +2,8 @@ import logging
 import numpy as np
 import pandas as pd
 
+from iclass.io import read_simulation_config
+
 
 def evtsplit(input_fname: str, key: str, fractions: tuple) -> tuple:
     """
@@ -108,12 +110,15 @@ def cfgsplit(input_fname: str, key: str, fractions: tuple) -> tuple:
             sum(fractions)
         )
 
-    config = pd.read_hdf(input_fname, key=key)
+    config = read_simulation_config(input_fname, key=key)
 
     parts = [
         config.copy()
         for _ in fractions
     ]
+    if hasattr(config, 'attrs'):
+        for cfg in parts:
+            cfg.attrs = config.attrs.copy()
 
     for part, frac in zip(parts, fractions):
         part.n_showers = (part.n_showers * frac).astype(int)
