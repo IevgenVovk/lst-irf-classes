@@ -83,3 +83,26 @@ def train_rf(
 
     logger.info("Model %s trained!", type(model).__name__)
     return clf
+
+
+def apply_rf(sample: pd.DataFrame, rf: RandomForestClassifier) -> pd.DataFrame:
+    """
+    Apply the pre-trained random forest to the given data frame
+
+    Parameters
+    ----------
+    sample: pd.DataFrame
+        Data frame to apply the random forest to.
+    rf: RandomForestClassifier
+        Pre-trained random forest
+
+    Returns
+    -------
+    pd.DataFrame:
+        Original data frame with the added 'reco_psf_class' column
+        containing the random forest predictions
+    """
+    features = rf.feature_names_in_
+    sample.loc[:, 'reco_psf_class'] = rf.predict(sample[features])
+
+    return sample

@@ -2,9 +2,9 @@
 """
 
 import unittest
-from unittest.mock import MagicMock, patch
+from unittest.mock import Mock, MagicMock, patch
 import pandas as pd
-from iclass.rf_func import feature_importance, train_rf
+from iclass.rf import feature_importance, train_rf, apply_rf
 
 class TestFeatureImportance(unittest.TestCase):
 
@@ -32,7 +32,7 @@ class TestFeatureImportance(unittest.TestCase):
 
 class TestTrainRF(unittest.TestCase):
 
-    @patch('iclass.rf_func.RandomForestClassifier')
+    @patch('iclass.rf.RandomForestClassifier')
     def test_train_rf_with_config(self, MockRF):
         # Mock configuration and training data
         config = {
@@ -71,7 +71,7 @@ class TestTrainRF(unittest.TestCase):
 
 
 
-    @patch('iclass.rf_func.RandomForestClassifier')
+    @patch('iclass.rf.RandomForestClassifier')
     def test_train_rf_without_config(self, MockRF):
         # Mock training data with additional features
         df_train = pd.DataFrame({
@@ -102,3 +102,20 @@ class TestTrainRF(unittest.TestCase):
                          "Target shapes do not match")
         self.assertTrue((actual_args[1].values == expected_target).all(),
                         "Target values do not match")
+
+    def test_apply_rf(self):
+        rf = Mock()
+        rf.feature_names_in_ = ['x', 'y']
+        rf.predict = Mock(return_value = [1, 2, 3])
+
+        data = dict(
+            x = [0, 0, 0],
+            y = [1, 1, 1],
+        )
+        sample = pd.DataFrame(data=data)
+        result = apply_rf(sample, rf)
+
+        self.assertListEqual(
+            result['reco_psf_class'].to_list(),
+            rf.predict.return_value
+        )

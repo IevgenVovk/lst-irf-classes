@@ -2,13 +2,14 @@
 (so far PSFR only). Part of the lst-irf-classes module.
 """
 import argparse
+import glob
 import json
 import logging
 
 import joblib
 import pandas as pd
 
-from iclass.rf_func import feature_importance, train_rf
+from iclass.rf import feature_importance, train_rf
 
 
 logging.basicConfig(
@@ -30,7 +31,7 @@ def main() -> None:
         '-i',
         "--input",
         default='',
-        help='input Monte Carlo file name'
+        help='input Monte Carlo file name (or mask)'
     )
     parser.add_argument(
         '-p',
@@ -64,7 +65,12 @@ def main() -> None:
     args = parser.parse_args()
 
     try:
-        train_df = pd.read_hdf(args.input, key=args.event_key)
+        train_df = pd.concat(
+            [
+                pd.read_hdf(file_name, key=args.event_key)
+                for file_name in glob.glob(args.input)
+            ]
+        )
     except FileNotFoundError:
         logger.error("Error: The file %s was not found.", args.input)
     except OSError as e:
@@ -81,6 +87,9 @@ def main() -> None:
     except json.JSONDecodeError:
         logger.error("Error: The file %s is not a valid JSON.", args.config)
 
+    if config.get('cuts', None):
+        train_df = train_df.query(config['cuts'])
+
     # Train the IRF classes random forest.
     clf = train_rf(train_df, config)
 
@@ -93,8 +102,9 @@ def main() -> None:
 
     # Save the model to a file
     if args.prefix != '':
-        logger.info("Saving the RF to '{args.prefix}ic_rf.pkl.pkl'.")
-        joblib.dump(clf, f'{args.prefix}ic_rf.pkl.pkl',
+        rf_file_name = f'{args.prefix}ic_rf.pkl'
+        logger.info(f"Saving the RF to '{rf_file_name}'.")
+        joblib.dump(clf, f'{rf_file_name}',
                     compress=args.complevel
                     )
 
