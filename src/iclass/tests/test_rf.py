@@ -76,8 +76,8 @@ class TestTrainRF(unittest.TestCase):
         mock_rf.assert_called_once_with(**config['random_forest_args'])
 
         # Verify clf.fit was called with the specified features and target
-        expected_features = df_train[['feature1', 'feature2']]
-        expected_target = df_train['psf_class']
+        expected_features = df_train[['feature1', 'feature2']].to_numpy()
+        expected_target = df_train['psf_class'].to_numpy()
 
         mock_clf.fit.assert_called_with(expected_features.values,
                                         expected_target.values
@@ -109,8 +109,8 @@ class TestTrainRF(unittest.TestCase):
         mock_rf.assert_called_once_with()
 
         # Verify clf.fit was called with the specified features and target
-        expected_features = df_train[['feature1', 'feature2']]
-        expected_target = df_train['psf_class']
+        expected_features = df_train[['feature1', 'feature2']].to_numpy()
+        expected_target = df_train['psf_class'].to_numpy()
 
         mock_clf.fit.assert_called_with(expected_features.values,
                                         expected_target.values
