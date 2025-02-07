@@ -1,10 +1,11 @@
-"""Script to train a random forest classifier for IRF event classes 
+"""Script to train a random forest classifier for IRF event classes
 (so far PSFR only). Part of the lst-irf-classes module.
 """
 import argparse
 import glob
 import json
 import logging
+import sys
 
 import joblib
 import pandas as pd
@@ -21,6 +22,10 @@ logger = logging.getLogger(__name__)
 
 
 def main() -> None:
+    """
+    Routine to train a RF classifier to determine IRF classes for CTAO
+    telescope data.
+    """
     parser = argparse.ArgumentParser(
         description=r"""
         Random forest training to determine IRF classes for CTAO telescopes.
@@ -73,19 +78,24 @@ def main() -> None:
         )
     except FileNotFoundError:
         logger.error("Error: The file %s was not found.", args.input)
+        sys.exit(1)
     except OSError as e:
         logger.error("Error: An issue occurred while reading the HDF5 file:"
                      "%s", e)
+        sys.exit(1)
     except json.JSONDecodeError:
         logger.error("Error: Failed to decode JSON from %s.", args.input)
+        sys.exit(1)
 
     try:
         with open(args.config, 'r', encoding='utf-8') as f:
             config = json.load(f)
     except FileNotFoundError:
         logger.error("Error: The file %s was not found.", args.config)
+        sys.exit(1)
     except json.JSONDecodeError:
         logger.error("Error: The file %s is not a valid JSON.", args.config)
+        sys.exit(1)
 
     if config.get('cuts', None):
         train_df = train_df.query(config['cuts'])
@@ -98,13 +108,12 @@ def main() -> None:
     df_feature_importance = feature_importance(feature_names, clf)
 
     logger.info("Importance of the features according to their Gini indeces:")
-    print(df_feature_importance) 
+    print(df_feature_importance)
 
     # Save the model to a file
     if args.prefix != '':
-        rf_file_name = f'{args.prefix}ic_rf.pkl'
-        logger.info(f"Saving the RF to '{rf_file_name}'.")
-        joblib.dump(clf, f'{rf_file_name}',
+        logger.info("Saving the RF to '{args.prefix}ic_rf.pkl.pkl'.")
+        joblib.dump(clf, f'{args.prefix}ic_rf.pkl.pkl',
                     compress=args.complevel
                     )
 

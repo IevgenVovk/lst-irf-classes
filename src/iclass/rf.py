@@ -10,15 +10,15 @@ logger = logging.getLogger(__name__)
 
 
 def feature_importance(
-    feature_names: list, 
+    feature_names: list,
     clf: RandomForestClassifier
 ) -> pd.DataFrame:
-    """Function to estimate the importance of features in a Random Forest 
+    """Function to estimate the importance of features in a Random Forest
     classifier based on the Gini index.
 
     Parameters
     ----------
-    feature_names : listß
+    feature_names : list
         Name of the columns of the dataframe used to train the RF.
     clf : RandomForestClassifier
         Trained RF for which the importance of features shall be checked.
@@ -30,10 +30,10 @@ def feature_importance(
     """
 
     importances = clf.feature_importances_
-    feature_importances = pd.DataFrame({'Feature': feature_names, 
+    feature_importances = pd.DataFrame({'Feature': feature_names,
                                         'Importance': importances})
     feature_importances = feature_importances.sort_values(
-                                                          by='Importance', 
+                                                          by='Importance',
                                                           ascending=False
                                                           )
 
@@ -41,7 +41,7 @@ def feature_importance(
 
 
 def train_rf(
-    df_train: pd.DataFrame, 
+    df_train: pd.DataFrame,
     config: dict = None
 ) -> RandomForestClassifier:
     """
@@ -50,7 +50,9 @@ def train_rf(
     Parameters
     ----------
     train: `pandas.DataFrame`
+        Data frame of events to train the RF with.
     config: dictionary
+        config file containing the features for the RF training.
 
     Returns
     -------
