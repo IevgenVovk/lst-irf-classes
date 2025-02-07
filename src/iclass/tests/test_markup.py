@@ -42,10 +42,10 @@ def get_ref_df(log_emin: float, log_emax: float, ebinsdec: int, nclasses: int, n
     loge = loge.flatten()
 
     data = dict(
-        src_x = np.zeros(len(offset)),
-        src_y = np.zeros(len(offset)),
-        reco_src_x = offset * np.cos(phi),
-        reco_src_y = offset * np.sin(phi),
+        mc_az = np.zeros(len(offset)),
+        mc_alt = np.zeros(len(offset)),
+        reco_az = np.pi/180 * offset * np.cos(phi),
+        reco_alt = np.pi/180 * offset * np.sin(phi),
         mc_energy = 10**loge,
         psf_class_true = (offset + 1).astype(int)
     )

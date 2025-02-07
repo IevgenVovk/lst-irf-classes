@@ -1,6 +1,7 @@
 import logging
 import numpy as np
 import pandas as pd
+from astropy.coordinates import angular_separation
 
 
 def mkmarkup(input_fname: str, key: str, ebinsdec: float, cuts: str = '') -> pd.DataFrame:
@@ -39,8 +40,11 @@ def mkmarkup(input_fname: str, key: str, ebinsdec: float, cuts: str = '') -> pd.
     if cuts:
         data = data.query(cuts)
 
-    data['reco_offset'] = data.eval(
-        'sqrt((reco_src_x - src_x)**2 + (reco_src_y - src_y)**2)'
+    data.loc[:, 'reco_offset'] = 180 / np.pi * angular_separation(
+        data['mc_az'].values,
+        data['mc_alt'].values,
+        data["reco_az"].values,
+        data["reco_alt"].values,
     )
     data['psf_class'] = -1
 
