@@ -76,12 +76,16 @@ class TestTrainRF(unittest.TestCase):
         mock_rf.assert_called_once_with(**config['random_forest_args'])
 
         # Verify clf.fit was called with the specified features and target
-        expected_features = df_train[['feature1', 'feature2']].to_numpy()
-        expected_target = df_train['psf_class'].to_numpy()
+        actual_args = mock_clf.fit.call_args[0]
+        expected_features = df_train[['feature1', 'feature2']]
+        expected_target = df_train['psf_class']
 
-        mock_clf.fit.assert_called_with(expected_features,
-                                        expected_target
-                                        )
+        pd.testing.assert_frame_equal(actual_args[0],
+                                      expected_features,
+                                      check_dtype=False)
+        pd.testing.assert_series_equal(actual_args[1],
+                                       expected_target,
+                                       check_dtype=False)
 
     @patch('iclass.rf.RandomForestClassifier')
     def test_train_rf_without_config(self, mock_rf):
@@ -109,12 +113,16 @@ class TestTrainRF(unittest.TestCase):
         mock_rf.assert_called_once_with()
 
         # Verify clf.fit was called with the specified features and target
-        expected_features = df_train[['feature1', 'feature2']].to_numpy()
-        expected_target = df_train['psf_class'].to_numpy()
+        actual_args = mock_clf.fit.call_args[0]
+        expected_features = df_train[['feature1', 'feature2']]
+        expected_target = df_train['psf_class']
 
-        mock_clf.fit.assert_called_with(expected_features,
-                                        expected_target
-                                        )
+        pd.testing.assert_frame_equal(actual_args[0],
+                                      expected_features,
+                                      check_dtype=False)
+        pd.testing.assert_series_equal(actual_args[1],
+                                       expected_target,
+                                       check_dtype=False)
 
     def test_apply_rf(self):
         """Function to test whether the RF is correctly applied.
