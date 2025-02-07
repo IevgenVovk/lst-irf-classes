@@ -13,7 +13,7 @@ authors = [
 description = "Tools to create event classes for IACTs in general and CTA/LST specifically"
 readme = "README.md"
 license = { file="LICENSE" }
-requires-python = ">=3.8"
+requires-python = ">=3.11"
 classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: BSD 3-Clause",
