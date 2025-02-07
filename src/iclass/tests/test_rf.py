@@ -79,8 +79,8 @@ class TestTrainRF(unittest.TestCase):
         expected_features = df_train[['feature1', 'feature2']].to_numpy()
         expected_target = df_train['psf_class'].to_numpy()
 
-        mock_clf.fit.assert_called_with(expected_features.values,
-                                        expected_target.values
+        mock_clf.fit.assert_called_with(expected_features,
+                                        expected_target
                                         )
 
     @patch('iclass.rf.RandomForestClassifier')
@@ -112,8 +112,8 @@ class TestTrainRF(unittest.TestCase):
         expected_features = df_train[['feature1', 'feature2']].to_numpy()
         expected_target = df_train['psf_class'].to_numpy()
 
-        mock_clf.fit.assert_called_with(expected_features.values,
-                                        expected_target.values
+        mock_clf.fit.assert_called_with(expected_features,
+                                        expected_target
                                         )
 
     def test_apply_rf(self):
