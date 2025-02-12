@@ -60,9 +60,6 @@ class TestTrainRF(unittest.TestCase):
             'psf_class': [0, 1, 0]
         })
 
-        # Mock the RandomForestClassifier instance
-        mock_clf = mock_rf()
-
         # Run the train_rf function with config
         df_train_original = df_train.copy(deep=True)
         train_rf(df_train, config)
@@ -74,6 +71,9 @@ class TestTrainRF(unittest.TestCase):
         # Assert RandomForestClassifier was initialized with the given
         # arguments
         mock_rf.assert_called_once_with(**config['random_forest_args'])
+        
+        # Get mock instance of the RandomForestClassifier
+        mock_clf = mock_rf()
 
         # Verify clf.fit was called with the specified features and target
         actual_args = mock_clf.fit.call_args[0]
@@ -98,9 +98,6 @@ class TestTrainRF(unittest.TestCase):
             'psf_class': [0, 1, 0]
         })
 
-        # Mock the RandomForestClassifier instance
-        mock_clf = mock_rf()
-
         # Run the train_rf function without a config
         df_train_original = df_train.copy(deep=True)
         train_rf(df_train, config=None)
@@ -111,6 +108,9 @@ class TestTrainRF(unittest.TestCase):
 
         # Assert RandomForestClassifier was initialized with default arguments
         mock_rf.assert_called_once_with()
+
+        # Get mock instance of the RandomForestClassifier
+        mock_clf = mock_rf()
 
         # Verify clf.fit was called with the specified features and target
         actual_args = mock_clf.fit.call_args[0]
