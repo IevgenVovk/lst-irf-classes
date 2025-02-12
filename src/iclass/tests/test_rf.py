@@ -61,7 +61,7 @@ class TestTrainRF(unittest.TestCase):
         })
 
         # Mock the RandomForestClassifier instance
-        mock_clf = mock_rf.return_value
+        mock_clf = mock_rf()
 
         # Run the train_rf function with config
         df_train_original = df_train.copy(deep=True)
@@ -99,7 +99,7 @@ class TestTrainRF(unittest.TestCase):
         })
 
         # Mock the RandomForestClassifier instance
-        mock_clf = mock_rf.return_value
+        mock_clf = mock_rf()
 
         # Run the train_rf function without a config
         df_train_original = df_train.copy(deep=True)
