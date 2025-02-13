@@ -71,7 +71,7 @@ class TestTrainRF(unittest.TestCase):
         # Assert RandomForestClassifier was initialized with the given
         # arguments
         mock_rf.assert_called_once_with(**config['random_forest_args'])
-        
+
         # Get mock instance of the RandomForestClassifier
         mock_clf = mock_rf()
 

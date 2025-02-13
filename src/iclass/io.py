@@ -26,11 +26,11 @@ def read_simulation_config(file_name: str, key: str) -> pd.DataFrame:
 
 def write_simulation_config(cfg: pd.DataFrame, file_name: str, key: str) -> None:
     """
-    Write simulation configuration table to 
+    Write simulation configuration table to
     the specified key of the HDF5 file.
 
-    lstchain expects the resulting table structure to be compliant with PyTables. 
-    Ensuring the correct format with DataFrame.to_hdf(..., key=some_key, format='table') 
+    lstchain expects the resulting table structure to be compliant with PyTables.
+    Ensuring the correct format with DataFrame.to_hdf(..., key=some_key, format='table')
     however, stores the resulting table under the additional 'some_key/table' key.
     This function bypasses the issue employing the `tables` module instead.
 

@@ -13,10 +13,10 @@ def main() -> None:
         description=r"""
         Event class computation tool for CTA-compatible event files.
 
-        Applies the pre-trained random forest to calculate 
+        Applies the pre-trained random forest to calculate
         the PSF quality class.
 
-        The input data file should be of DL2 level 
+        The input data file should be of DL2 level
         and include all the columns used during the RF training.
         """
     )
