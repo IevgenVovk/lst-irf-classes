@@ -8,12 +8,7 @@ from iclass.rf import feature_importance, train_rf, apply_rf
 
 
 class TestFeatureImportance(unittest.TestCase):
-    """_summary_
-
-    Parameters
-    ----------
-    unittest : _type_
-        _description_
+    """Class for testing the RF feaature importance function.
     """
 
     def test_feature_importance(self):
