@@ -2,6 +2,7 @@ import argparse
 import logging
 
 from iclass.split import evtsplit, cfgsplit
+from iclass.io import write_simulation_config
 
 
 def main() -> None:
@@ -69,7 +70,10 @@ def main() -> None:
     for i, (evt, cfg) in enumerate(zip(evt_samples, cfg_samples)):
         output = f'{args.prefix}part{i}.h5'
         evt.to_hdf(output, key=args.event_key, complevel=args.complevel)
-        cfg.to_hdf(output, key=args.cfg_key, complevel=args.complevel)
+        # MC configuration table has to be written with `tables`
+        # as DataFrame.to_hdf(..., format='table') stores the resulting
+        # table under the additional '.../table' key.
+        write_simulation_config(cfg, output, args.cfg_key)
 
 
 if __name__ == "__main__":
