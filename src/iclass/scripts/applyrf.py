@@ -52,8 +52,9 @@ def main() -> None:
     parser.add_argument(
         '-c',
         "--cfg-key",
-        default='/simulation/run_config',
-        help='input HDF5 file key to read the config from'
+        default='',
+        help='input HDF5 file key to read the config from. '
+            'For LST MCs the path is "/simulation/run_config".'
     )
     parser.add_argument(
         '-s',
@@ -72,7 +73,10 @@ def main() -> None:
 
     rf = joblib.load(args.rf)
     sample = pd.read_hdf(args.input, key=args.event_key)
-    cfg = read_simulation_config(args.input, key=args.cfg_key)
+    if args.cfg_key:
+        cfg = read_simulation_config(args.input, key=args.cfg_key)
+    else:
+        cfg = None
     sample = apply_rf(sample, rf)
 
     if args.split:
@@ -83,18 +87,20 @@ def main() -> None:
             output = f'{args.prefix}{fname}_class{psf_class}.h5'
             subsample = sample.query(f'reco_psf_class == {psf_class}')
             subsample.to_hdf(output, key=args.event_key, complevel=args.complevel)
-            # MC configuration table has to be written with `tables`
-            # as DataFrame.to_hdf(..., format='table') stores the resulting
-            # table under the additional '.../table' key.
-            write_simulation_config(cfg, output, args.cfg_key)
+            if cfg:
+                # MC configuration table has to be written with `tables`
+                # as DataFrame.to_hdf(..., format='table') stores the resulting
+                # table under the additional '.../table' key.
+                write_simulation_config(cfg, output, args.cfg_key)
     else:
         _, file_name = os.path.split(args.input)
         output = f'{args.prefix}{file_name}'
         sample.to_hdf(output, key=args.event_key, complevel=args.complevel)
-        # MC configuration table has to be written with `tables`
-        # as DataFrame.to_hdf(..., format='table') stores the resulting
-        # table under the additional '.../table' key.
-        write_simulation_config(cfg, output, args.cfg_key)
+        if cfg:
+            # MC configuration table has to be written with `tables`
+            # as DataFrame.to_hdf(..., format='table') stores the resulting
+            # table under the additional '.../table' key.
+            write_simulation_config(cfg, output, args.cfg_key)
 
 
 if __name__ == "__main__":
