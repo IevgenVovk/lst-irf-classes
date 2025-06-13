@@ -1,4 +1,5 @@
 import logging
+import random
 import numpy as np
 import pandas as pd
 
@@ -48,9 +49,11 @@ def evtsplit(input_fname: str, key: str, fractions: tuple) -> tuple:
         cfractions = np.concatenate(([0], cfractions))
 
     samples = []
+    seed = random.randint(0, 2**32 - 1)
 
     for obs_id in events.obs_id.unique():
         _events = events.query(f'obs_id == {obs_id}')
+        _events = _events.sample(frac=1, random_state=seed).reset_index(drop=True)
         nevents = len(_events)
 
         _samples = [
