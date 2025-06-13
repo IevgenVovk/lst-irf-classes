@@ -51,6 +51,7 @@ def evtsplit(input_fname: str, key: str, fractions: tuple) -> tuple:
 
     for obs_id in events.obs_id.unique():
         _events = events.query(f'obs_id == {obs_id}')
+        _events = _events.sample(frac=1, random_state=42).reset_index(drop=True)
         nevents = len(_events)
 
         _samples = [
