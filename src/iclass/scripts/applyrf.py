@@ -73,11 +73,12 @@ def main() -> None:
 
     rf = joblib.load(args.rf)
     sample = pd.read_hdf(args.input, key=args.event_key)
+    sample = apply_rf(sample, rf)
+
     if args.cfg_key:
         cfg = read_simulation_config(args.input, key=args.cfg_key)
     else:
         cfg = None
-    sample = apply_rf(sample, rf)
 
     if args.split:
         _, file_name = os.path.split(args.input)
@@ -87,7 +88,7 @@ def main() -> None:
             output = f'{args.prefix}{fname}_class{psf_class}.h5'
             subsample = sample.query(f'reco_psf_class == {psf_class}')
             subsample.to_hdf(output, key=args.event_key, complevel=args.complevel)
-            if cfg is not None and not cfg.empty:
+            if args.cfg_key:
                 # MC configuration table has to be written with `tables`
                 # as DataFrame.to_hdf(..., format='table') stores the resulting
                 # table under the additional '.../table' key.
@@ -96,7 +97,7 @@ def main() -> None:
         _, file_name = os.path.split(args.input)
         output = f'{args.prefix}{file_name}'
         sample.to_hdf(output, key=args.event_key, complevel=args.complevel)
-        if cfg is not None and not cfg.empty:
+        if args.cfg_key:
             # MC configuration table has to be written with `tables`
             # as DataFrame.to_hdf(..., format='table') stores the resulting
             # table under the additional '.../table' key.
