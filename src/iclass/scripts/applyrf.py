@@ -77,8 +77,6 @@ def main() -> None:
 
     if args.cfg_key:
         cfg = read_simulation_config(args.input, key=args.cfg_key)
-    else:
-        cfg = None
 
     if args.split:
         _, file_name = os.path.split(args.input)
